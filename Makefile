@@ -133,6 +133,8 @@ LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null | head -n 1)
 # Set Rust target path
 RUST_TARGET_PATH := ${CURDIR}
 
+CARGO := @cargo
+
 # Disable PIE when possible (for Ubuntu 16.10 toolchain)
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
 CFLAGS += -fno-pie -no-pie
@@ -179,7 +181,7 @@ kernel: rkernel $(OBJS) entry.o entryother initcode kernel.ld
 	$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
 
 rkernel:
-	@xargo build --target i386
+	$(CARGO) xbuild --target i386.json
 
 # kernelmemfs is a copy of kernel that maintains the
 # disk image in memory instead of writing to a disk.
@@ -252,7 +254,7 @@ clean:
 	xv6memfs.img mkfs .gdbinit \
 	$(UPROGS)
 	rm -rf dist dist-test
-	@xargo clean
+	$(CARGO) clean
 
 # make a printout
 FILES = $(shell grep -v '^\#' runoff.list)

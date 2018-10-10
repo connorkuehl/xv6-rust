@@ -20,7 +20,7 @@ Prerequisites:
 
 1. The Rust compiler.
 
-1. `xargo` (`cargo install xargo`).
+1. `cargo-xbuild` (`cargo install cargo-xbuild`).
 
 1. A nightly override for the cloned repository (`rustup override set nightly`).
 
