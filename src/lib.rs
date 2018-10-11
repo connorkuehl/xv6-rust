@@ -1,19 +1,23 @@
 #![no_std]
 
+extern crate x86;
+
+pub mod console;
+pub mod ioapic;
+pub mod lapic;
+pub mod traps;
+pub mod uart;
+
+use uart::uartputc;
+
 use core::panic::PanicInfo;
 
-extern "C" {
-    fn uartputc(c: i32);
-}
-
 #[no_mangle]
-pub extern "C" fn kmain() {
+pub unsafe extern "C" fn kmain() {
     let message = b"HELLO FROM RUST\n";
 
     for ch in message {
-        unsafe {
-            uartputc(*ch as i32);
-        }
+        uartputc(*ch as i32);
     }
 }
 

@@ -71,7 +71,6 @@ OBJS = \
 	sysproc.o\
 	trapasm.o\
 	trap.o\
-	uart.o\
 	vectors.o\
 	vm.o\
 
