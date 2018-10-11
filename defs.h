@@ -165,10 +165,10 @@ void            idtinit(void);
 extern uint     ticks;
 void            tvinit(void);
 
-// uart.c
-void            uartinit(void);
-void            uartintr(void);
-void            uartputc(int);
+// uart.rs
+extern void uartinit(void);
+extern void uartintr(void);
+extern void uartputc(int);
 
 // vm.c
 void            seginit(void);
