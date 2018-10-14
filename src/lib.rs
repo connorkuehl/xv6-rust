@@ -7,6 +7,7 @@ pub mod ioapic;
 pub mod lapic;
 pub mod traps;
 pub mod uart;
+pub mod kbd;
 
 use uart::uartputc;
 
@@ -25,5 +26,3 @@ pub unsafe extern "C" fn kmain() {
 fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
-
-
