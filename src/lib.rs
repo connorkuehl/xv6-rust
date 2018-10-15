@@ -8,6 +8,7 @@ pub mod file;
 pub mod fs;
 pub mod ioapic;
 pub mod lapic;
+pub mod string;
 pub mod syscall;
 pub mod sysproc;
 pub mod param;
