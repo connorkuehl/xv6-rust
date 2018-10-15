@@ -67,7 +67,6 @@ OBJS = \
 	swtch.o\
 	syscall.o\
 	sysfile.o\
-	sysproc.o\
 	trapasm.o\
 	trap.o\
 	vectors.o\
