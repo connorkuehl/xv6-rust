@@ -14,3 +14,15 @@ panic = "abort"
 
 [dependencies]
 x86 = "0.11.*"
+rust_definitions = { path = "rust_definitions" }
+
+[features]
+default = []
+
+# If the kernel is compiled with these features, compile rust_definitions with
+# these features
+PDX_XV6 = ["rust_definitions/PDX_XV6"]
+CS333_P1 = ["rust_definitions/CS333_P1"]
+CS333_P2 = ["rust_definitions/CS333_P2"]
+CS333_P3P4 = ["rust_definitions/CS333_P3P4"]
+CS333_P5 = ["rust_definitions/CS333_P5"]

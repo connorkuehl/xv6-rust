@@ -1,5 +1,6 @@
 # Set flag to correct CS333 project number: 1, 2, ...
 # 0 == original xv6-pdx distribution functionality
+RUST_FEATURES = PDX_XV6
 CS333_PROJECT ?= 0
 PRINT_SYSCALLS ?= 0
 CS333_CFLAGS ?= -DPDX_XV6
@@ -14,24 +15,28 @@ endif
 ifeq ($(CS333_PROJECT), 1)
 CS333_CFLAGS += -DCS333_P1
 # CS333_UPROGS += _date
+RUST_FEATURES += CS333_P1
 endif
 
 ifeq ($(CS333_PROJECT), 2)
 CS333_CFLAGS += -DCS333_P1 -DUSE_BUILTINS -DCS333_P2
 CS333_UPROGS += _date _time _ps
 CS333_TPROGS += _testsetuid  _testuidgid _p2-test
+RUST_FEATURES += CS333_P1 CS333_P2
 endif
 
 ifeq ($(CS333_PROJECT), 3)
 CS333_CFLAGS += -DCS333_P1 -DUSE_BUILTINS -DCS333_P2 -DCS333_P3P4
 CS333_UPROGS += _date _time _ps
 CS333_TPROGS += _p2-test _testsetuid _testuidgid
+RUST_FEATURES += CS333_P1 CS333_P2 CS333_P3P4
 endif
 
 ifeq ($(CS333_PROJECT), 4)
 CS333_CFLAGS += -DCS333_P1 -DUSE_BUILTINS -DCS333_P2 -DCS333_P3P4
 CS333_UPROGS += _date _time _ps
 CS333_TPROGS += _p2-test _testsetuid _testuidgid _p4-test
+RUST_FEATURES += CS333_P1 CS333_P2 CS333_P3P4
 endif
 
 ifeq ($(CS333_PROJECT), 5)
@@ -41,6 +46,7 @@ CS333_CFLAGS += -DUSE_BUILTINS -DCS333_P1 -DCS333_P2 \
 # CS333_CFLAGS += -DCS333_P1 -DUSE_BUILTINS -DCS333_P2 -DCS333_P5
 CS333_UPROGS += _date _time _ps _chgrp  _chmod _chown
 CS333_TPROGS += _p2-test _testsetuid  _testuidgid _p4-test _p5-test
+RUST_FEATURES += CS333_P1 CS333_P2 CS333_P3P4 CS333_P5
 endif
 
 ## CS333 students should not have to make modifications past here ##
@@ -177,7 +183,7 @@ kernel: rkernel $(OBJS) entry.o entryother initcode kernel.ld
 	$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
 
 rkernel:
-	$(CARGO) xbuild --target i386.json
+	$(CARGO) xbuild --target i386.json --features $(RUST_FEATURES)
 
 # kernelmemfs is a copy of kernel that maintains the
 # disk image in memory instead of writing to a disk.

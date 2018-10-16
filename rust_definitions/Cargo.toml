@@ -1,0 +1,16 @@
+[package]
+name = "rust_definitions"
+version = "0.1.0"
+authors = ["TODO"]
+
+[dependencies]
+
+[features]
+default = []
+
+# These Features are used to conditionally compile this project
+PDX_XV6 = []
+CS333_P1 = []
+CS333_P2 = []
+CS333_P3P4 = []
+CS333_P5 = []
