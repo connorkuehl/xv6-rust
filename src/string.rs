@@ -24,8 +24,8 @@ pub extern "C" fn strncmp(s: *const c_char,
                           -> isize {
 
     //This will give weird results if you pass in a negative number
-    let s_slice = unsafe {slice::from_raw_parts(s,n as usize)};
-    let t_slice = unsafe {slice::from_raw_parts(t,n as usize)};
+    let s_slice = unsafe {slice::from_raw_parts(s,n)};
+    let t_slice = unsafe {slice::from_raw_parts(t,n)};
     //Iterate though elements of both lists at the same time
     //until we reach a 0
     for (l,r) in s_slice.iter().take_while(|&&x| x != 0).zip(t_slice) {
