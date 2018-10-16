@@ -1,4 +1,4 @@
-use fs::NDIRECT;
+use rust_definitions::fs::NDIRECT;
 use pipe::Pipe;
 
 #[repr(C)]

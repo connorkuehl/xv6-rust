@@ -1,6 +1,6 @@
 use file::{File, Inode};
-use param::NOFILE;
-use types::Pde;
+use rust_definitions::param::NOFILE;
+use rust_definitions::types::Pde;
 
 use core::ffi::c_void;
 
