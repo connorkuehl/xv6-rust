@@ -20,12 +20,9 @@ pub extern "C" fn strlen(s: *const c_char) -> isize {
 #[no_mangle]
 pub extern "C" fn strncmp(s: *const c_char, 
                           t: *const c_char, 
-                          n: isize) 
+                          n: usize) 
                           -> isize {
 
-    if n <=0 {
-        return -1;
-    }
     //This will give weird results if you pass in a negative number
     let s_slice = unsafe {slice::from_raw_parts(s,n as usize)};
     let t_slice = unsafe {slice::from_raw_parts(t,n as usize)};
@@ -34,8 +31,6 @@ pub extern "C" fn strncmp(s: *const c_char,
     for (l,r) in s_slice.iter().take_while(|&&x| x != 0).zip(t_slice) {
         //Return the difference with unmatching characters
         if l != r { return *l as isize - *r as isize }
-        //And return 0 if we reached the end of the string
-        else if *l == 0 {return 0}
     }
     0
 }
