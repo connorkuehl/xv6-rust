@@ -1,6 +1,19 @@
 #![no_std]
 
+//Disable certain warnings when running unit tests
+//Certain categories of warnings are spuriously generated so we
+//ignore them
+#![cfg_attr(test, allow(dead_code, unused_macros, unused_imports))]
+
 extern crate x86;
+
+//We can use std when running unit tests
+#[cfg(test)]
+#[macro_use] extern crate std;
+
+#[cfg(test)]
+#[macro_use] extern crate proptest;
+
 
 pub mod arch;
 pub mod console;
@@ -33,6 +46,7 @@ pub unsafe extern "C" fn kmain() {
     }
 }
 
+#[cfg(not(test))]
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     loop {}

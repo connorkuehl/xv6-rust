@@ -74,3 +74,90 @@ pub extern "C" fn safestrcpy(s: *mut c_char, t: *const c_char, n: isize) -> *con
 
     return s;
 }
+
+#[cfg(test)]
+mod str_test {
+    use proptest::prelude::*;
+    use std::cmp;
+    use std::ffi::{CStr, CString};
+    use std::vec::Vec;
+    use string::{c_char, safestrcpy, strncmp, strncpy};
+    proptest! {
+
+        #[test]
+        fn strncmp_pseudo_symmetric(s in "[[:print:]]*", t in "[[:print:]]*") {
+            let max_length = cmp::max(s.len(),t.len())+1;
+            let s = CString::new(s).unwrap().as_ptr();
+            let t = CString::new(t).unwrap().as_ptr();
+            assert_eq!(strncmp(s,t,max_length),-1*strncmp(t,s,max_length))
+        }
+        #[test]
+        fn strncmp_reflexive(s in "[[:print:]]*") {
+            let len = s.len()+1;
+            let s = CString::new(s).unwrap().as_ptr();
+            assert_eq!(strncmp(s,s,len), 0)
+        }
+        #[should_panic]
+        #[test]
+        fn strncmp_not_equal(s in "[[:print:]]*", t in "[[:print:]]*") {
+            let len = s.len()+1;
+            let s = CString::new(s).unwrap().as_ptr();
+            let t = CString::new(t).unwrap().as_ptr();
+            if t != s {
+                assert_eq!(strncmp(s,t,len), 0)
+            } else {
+                panic!()
+            }
+        }
+        #[test]
+        fn strncpy_equals(s in "[[:print:]]{0,255}") {
+            let len = s.len() + 1;
+            let from_str = CString::new(s.clone()).unwrap();
+            let mut buffer: [i8; 256] = [0; 256];
+
+            //Check to make sure the string has the right length
+            assert_eq!(from_str.as_bytes_with_nul().len(),len);
+
+            //Make sure we get the same pointer back
+            assert_eq!(
+                strncpy(buffer.as_mut_ptr(),from_str.as_ptr(),len as isize),
+                    buffer.as_ptr());
+
+
+            let final_bytes: Vec<u8> = buffer
+                .iter()
+                .map(|&x| x as u8)
+                .take_while(|&x| x != 0)
+                .collect();
+
+            let final_str = CString::new(final_bytes).unwrap();
+            assert_eq!(final_str.as_bytes_with_nul().len(),len);
+            assert_eq!(final_str,from_str);
+        }
+        #[test]
+        fn safestrcpy_equals(s in "[[:print:]]{0,255}") {
+            let len = s.len() + 1;
+            let from_str = CString::new(s.clone()).unwrap();
+            let mut buffer: [i8; 256] = [0; 256];
+
+            //Check to make sure the string has the right length
+            assert_eq!(from_str.as_bytes_with_nul().len(),len);
+
+            //Make sure we get the same pointer back
+            assert_eq!(
+                safestrcpy(buffer.as_mut_ptr(),from_str.as_ptr(),len as isize),
+                    buffer.as_ptr());
+
+
+            let final_bytes: Vec<u8> = buffer
+                .iter()
+                .map(|&x| x as u8)
+                .take_while(|&x| x != 0)
+                .collect();
+
+            let final_str = CString::new(final_bytes).unwrap();
+            assert_eq!(final_str.as_bytes_with_nul().len(),len);
+            assert_eq!(final_str,from_str);
+        }
+    }
+}

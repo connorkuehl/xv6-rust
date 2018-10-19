@@ -339,6 +339,9 @@ dist-test:
 	chmod a+x dist/*pl
 	cd dist-test; $(MAKE) run
 
+test:
+	cargo test
+
 # update this rule (change rev#) when it is time to
 # make a new revision.
 tar:
