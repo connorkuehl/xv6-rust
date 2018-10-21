@@ -1,8 +1,9 @@
 use file::{File, Inode};
-use param::NOFILE;
 use types::Pde;
+use param;
+use mmu;
 
-use core::ffi::c_void;
+use core::ffi;
 
 extern "C" {
     pub fn myproc() -> *const Proc;
@@ -10,8 +11,21 @@ extern "C" {
     pub fn kill(pid: i32) -> i32;
     pub fn exit();
     pub fn fork() -> i32;
-    pub fn sleep(chan: *const c_void, lk: *const c_void);
+    pub fn sleep(chan: *const ffi::c_void, lk: *const ffi::c_void);
     pub fn wait() -> i32;
+    pub fn procdump();
+}
+
+#[repr(C)]
+pub struct Cpu {
+    apicid: u8,
+    scheduler: *const Context,
+    ts: mmu::TaskState,
+    gdt: [mmu::SegDesc<u32>; param::NSEGS],
+    started: u32,
+    ncli: i32,
+    intena: i32,
+    proc: *const Proc,
 }
 
 #[repr(C)]
@@ -32,9 +46,9 @@ pub struct Proc {
     pub pid: u32,
     pub parent: *const Proc,
     pub context: *const Context,
-    pub chan: *const c_void,
+    pub chan: *const ffi::c_void,
     pub killed: i32,
-    pub ofile: [*const File; NOFILE],
+    pub ofile: [*const File; param::NOFILE],
     pub cwd: *const Inode,
     pub name: [u8; 16],
 }

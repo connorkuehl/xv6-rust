@@ -24,6 +24,9 @@ static struct {
   int locking;
 } cons;
 
+// Enables `console.rs` to use xv6's locking primitives
+struct spinlock *conslk = &cons.lock;
+
 static void
 printint(int xx, int base, int sign)
 {
