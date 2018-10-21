@@ -1,36 +1,39 @@
 #![no_std]
 
+#[macro_use]
+extern crate bitfield;
+#[macro_use]
+extern crate lazy_static;
+extern crate spin;
 extern crate x86;
 
 pub mod arch;
+#[macro_use]
 pub mod console;
 pub mod file;
 pub mod fs;
 pub mod ioapic;
 pub mod lapic;
+pub mod kbd;
 pub mod string;
 pub mod syscall;
 pub mod sysproc;
+pub mod mmu;
 pub mod param;
 pub mod pipe;
 pub mod proc;
+pub mod spinlock;
 pub mod trap;
 pub mod traps;
 pub mod types;
 pub mod uart;
-pub mod kbd;
 
-use uart::uartputc;
 
 use core::panic::PanicInfo;
 
 #[no_mangle]
 pub unsafe extern "C" fn kmain() {
-    let message = b"HELLO FROM RUST\n";
-
-    for ch in message {
-        uartputc(*ch as i32);
-    }
+    println!("Hello from {}", "Rust");
 }
 
 #[panic_handler]
