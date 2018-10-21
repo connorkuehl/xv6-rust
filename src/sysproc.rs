@@ -82,7 +82,6 @@ pub unsafe extern "C" fn sys_uptime() -> i32 {
 
 #[no_mangle]
 pub unsafe extern "C" fn sys_halt() -> i32 {
-    // TODO add "shutting down" message
     outw(0x604, 0x0 | 0x2000);
     0
 }

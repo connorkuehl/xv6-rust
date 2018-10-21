@@ -4,6 +4,7 @@
 
 int
 main(void) {
+  printf(1, "Shutting down...\n");
   halt();
   exit();
 }
